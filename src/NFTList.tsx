@@ -5,6 +5,7 @@ import { useTheme, Typography, Container, Paper, Grid, Table, TableHead, TableBo
 import { FirstPage, KeyboardArrowLeft, KeyboardArrowRight, LastPage } from '@material-ui/icons';
 
 import useStyles from "./Style";
+import axios from "axios";
 
 import Web3 from "web3";
 
@@ -130,9 +131,12 @@ function NFTList(props: any) {
             const tmpDisplayRows = displayRows;
             contract.methods.cards(token).call().then((card: any) => {
               console.log(card);
-              tmpDisplayRows.push({ ID: i, Clarity: card.name, Cut: card.level, Carat: "1", Color: "1", Price: 1, ReportHash: "1", Status: "1" });
-              setDisplayRows(tmpDisplayRows)
-              setFilter({ ...filter, OffSale: true, OnSale: true, Rented: true, Sold: true })
+              axios.get("http://49.50.164.195:8888/v1/nft?id="+card.toString()).then((val) => {
+                console.log(val);
+                tmpDisplayRows.push({ ID: i, Clarity: card.name, Cut: card.level, Carat: "1", Color: "1", Price: 1, ReportHash: "1", Status: "1" });
+                setDisplayRows(tmpDisplayRows)
+                setFilter({ ...filter, OffSale: true, OnSale: true, Rented: true, Sold: true })
+              });
             });
           });
         }

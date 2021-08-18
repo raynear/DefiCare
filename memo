@@ -1,0 +1,6 @@
+nft list
+nft page : nft => ft
+ft list
+ft page : ft => option
+option list
+option page : option 실행
