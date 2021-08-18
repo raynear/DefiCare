@@ -75,16 +75,16 @@ function NFT(props: any) {
     return false;
   }
 
-  function rentDia() {
-    nftContract.methods.rentDiamond(id).send({ from: Retailer }).then((r: any) => {
+  function rentNFT() {
+    nftContract.methods.rentNFT(id).send({ from: Retailer }).then((r: any) => {
       console.log(r);
       setMyStorageList(id);
       setInMyList(true);
     });
   }
 
-  function returnDia() {
-    console.log("returnDia");
+  function returnNFT() {
+    console.log("returnNFT");
   }
 
   function submit() {
@@ -102,7 +102,7 @@ function NFT(props: any) {
         <Grid container={true} className={classes.container}>
           <Grid item={true} className={classes.grid} xs={12} md={12} lg={12}>
             <div className={classes.listImg}>
-              <Typography variant="h4" color="textSecondary" className={classes.listText}>Diamond</Typography>
+              <Typography variant="h4" color="textSecondary" className={classes.listText}>NFT</Typography>
             </div>
             <Paper style={{ textAlign: "right" }}>
               <Grid container={true} className={classes.container}>
@@ -137,13 +137,13 @@ function NFT(props: any) {
                 </Grid>
                 {!inMyList &&
                   <Grid item={true} className={classes.grid} xs={12} md={12} lg={12}>
-                    <Button fullWidth={true} variant="contained" color="primary" onClick={rentDia}>wanna Rent</Button>
+                    <Button fullWidth={true} variant="contained" color="primary" onClick={rentNFT}>wanna Rent</Button>
                   </Grid>
                 }
                 {inMyList &&
                   <>
                     <Grid item={true} className={classes.grid} xs={6} md={6} lg={6}>
-                      <Button fullWidth={true} variant="contained" color="primary" onClick={returnDia}>반환</Button>
+                      <Button fullWidth={true} variant="contained" color="primary" onClick={returnNFT}>반환</Button>
                     </Grid>
                     <Grid item={true} className={classes.grid} xs={6} md={6} lg={6}>
                       <Button fullWidth={true} variant="contained" color="primary" onClick={submit}>판매확정(송금)!</Button>

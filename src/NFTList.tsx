@@ -68,7 +68,7 @@ function TablePaginationActions(props: ITablePaginationActionsProps) {
   );
 }
 
-interface IDiamond {
+interface INFT {
   ID: number;
   Clarity: string;
   Cut: string;
@@ -79,14 +79,14 @@ interface IDiamond {
   ReportHash: string;
 }
 
-enum DiaStatus {
+enum NFTStatus {
   OffSale = 0,
   OnSale = 1,
   Rented = 2,
   Sold = 3
 }
 
-function DiaStatusStr(status: number) {
+function NFTStatusStr(status: number) {
   if (status === 0) {
     return "OffSale";
   } else if (status === 1) {
@@ -105,7 +105,7 @@ function NFTList(props: any) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [filter, setFilter] = useState({ type: "All", OffSale: false, OnSale: false, Rented: false, Sold: false })
-  const [displayRows, setDisplayRows] = useState<IDiamond[]>([]);
+  const [displayRows, setDisplayRows] = useState<INFT[]>([]);
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, displayRows.length - page * rowsPerPage);
 
@@ -212,13 +212,13 @@ function NFTList(props: any) {
     if (filter.type === "My" && !inMyStorageList(parseInt(obj.ID, 10))) {
       return false;
     }
-    if (filter.OffSale && parseInt(obj.Status, 10) === DiaStatus.OffSale) {
+    if (filter.OffSale && parseInt(obj.Status, 10) === NFTStatus.OffSale) {
       return true;
-    } else if (filter.OnSale && parseInt(obj.Status, 10) === DiaStatus.OnSale) {
+    } else if (filter.OnSale && parseInt(obj.Status, 10) === NFTStatus.OnSale) {
       return true;
-    } else if (filter.Rented && parseInt(obj.Status, 10) === DiaStatus.Rented) {
+    } else if (filter.Rented && parseInt(obj.Status, 10) === NFTStatus.Rented) {
       return true;
-    } else if (filter.Sold && parseInt(obj.Status, 10) === DiaStatus.Sold) {
+    } else if (filter.Sold && parseInt(obj.Status, 10) === NFTStatus.Sold) {
       return true;
     }
     return false;
@@ -274,7 +274,7 @@ function NFTList(props: any) {
                     <TableCell align="center">{row.Carat}</TableCell>
                     <TableCell align="center">{row.Color}</TableCell>
                     <TableCell align="right">{row.Price}</TableCell>
-                    <TableCell align="right">{DiaStatusStr(parseInt(row.Status, 10))}</TableCell>
+                    <TableCell align="right">{NFTStatusStr(parseInt(row.Status, 10))}</TableCell>
                     <TableCell align="right">{row.ReportHash}</TableCell>
                   </TableRow>
                 ))}

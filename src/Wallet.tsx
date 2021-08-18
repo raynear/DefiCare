@@ -24,7 +24,7 @@ function Wallet(props: any) {
 
   useEffect(() => {
 
-    marketContract.methods.getDiamond(props.match.params.ID).call().then((r: any) => {
+    marketContract.methods.getNFT(props.match.params.ID).call().then((r: any) => {
       setValues({ clarity: r[1], cut: r[2], carat: r[3], color: r[4], price: r[5], id: r[0], reportHash: r[6] })
     });
 
@@ -75,16 +75,16 @@ function Wallet(props: any) {
     return false;
   }
 
-  function rentDia() {
-    marketContract.methods.rentDiamond(id).send({ from: Retailer }).then((r: any) => {
+  function rentNFT() {
+    marketContract.methods.rentNFT(id).send({ from: Retailer }).then((r: any) => {
       console.log(r);
       setMyStorageList(id);
       setInMyList(true);
     });
   }
 
-  function returnDia() {
-    console.log("returnDia");
+  function returnNFT() {
+    console.log("returnNFT");
   }
 
   function submit() {
@@ -102,7 +102,7 @@ function Wallet(props: any) {
         <Grid container={true} className={classes.container}>
           <Grid item={true} className={classes.grid} xs={12} md={12} lg={12}>
             <div className={classes.listImg}>
-              <Typography variant="h4" color="textSecondary" className={classes.listText}>Diamond</Typography>
+              <Typography variant="h4" color="textSecondary" className={classes.listText}>NFT</Typography>
             </div>
             <Paper style={{ textAlign: "right" }}>
               <Grid container={true} className={classes.container}>
@@ -137,13 +137,13 @@ function Wallet(props: any) {
                 </Grid>
                 {!inMyList &&
                   <Grid item={true} className={classes.grid} xs={12} md={12} lg={12}>
-                    <Button fullWidth={true} variant="contained" color="primary" onClick={rentDia}>wanna Rent</Button>
+                    <Button fullWidth={true} variant="contained" color="primary" onClick={rentNFT}>wanna Rent</Button>
                   </Grid>
                 }
                 {inMyList &&
                   <>
                     <Grid item={true} className={classes.grid} xs={6} md={6} lg={6}>
-                      <Button fullWidth={true} variant="contained" color="primary" onClick={returnDia}>반환</Button>
+                      <Button fullWidth={true} variant="contained" color="primary" onClick={returnNFT}>반환</Button>
                     </Grid>
                     <Grid item={true} className={classes.grid} xs={6} md={6} lg={6}>
                       <Button fullWidth={true} variant="contained" color="primary" onClick={submit}>판매확정(송금)!</Button>

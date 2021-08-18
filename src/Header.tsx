@@ -15,7 +15,7 @@ function Header() {
     <>
       <Toolbar className={classes.toolbar}>
         <Link className={classes.toolbarLink} color="textPrimary" align="center" noWrap={true} variant="h5" href="/DefiCare/">
-          <b>Diamond Chain</b>
+          <b>NFT Chain</b>
         </Link>
       </Toolbar>
       <Toolbar className={classes.toolbar}>

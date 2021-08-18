@@ -17,7 +17,7 @@ function Report(props: any) {
   //  const id = match.params.id;
 
   const [values, setValues] = useState({ clarity: '', cut: '', carat: '', color: '', price: 0, girdleCode: '', tokenId: '', reportRoot: '' })
-  const [myDia, setMyDia] = useState(false);
+  const [myNFT, setMyNFT] = useState(false);
   const [price, setPrice] = useState(0);
   const [proof, setProof] = useState({ proof: "", inputs: "", commitment: "", salt: "", tokenId: "" });
 
@@ -60,7 +60,7 @@ function Report(props: any) {
           console.log(response2.data);
           for (const i in response.data) {
             if (response.data[i].girdleCode === props.match.params.girdleCode) {
-              setMyDia(true);
+              setMyNFT(true);
             }
           }
         });
@@ -112,7 +112,7 @@ function Report(props: any) {
     /*
         const marketContract = new web3.eth.Contract(marketABI as any, marketContractAddress);
     
-        marketContract.methods.getDiamond(match.params.ID).call().then((r: any) => {
+        marketContract.methods.getNFT(match.params.ID).call().then((r: any) => {
           setValues({ clarity: r[1], cut: r[2], carat: r[3], color: r[4], price: r[5], id: r[0], certinfo: r[6] })
         })
     
@@ -151,9 +151,9 @@ function Report(props: any) {
     function inMyCookieList(id: number) {
       const Cookies = document.cookie.split(";");
       for (const i in Cookies) {
-        if (Cookies[i].split("=")[0].trim() === "MyDiaList") {
-          const DiaList = JSON.parse(Cookies[i].split("=")[1]);
-          if (DiaList.includes(id)) {
+        if (Cookies[i].split("=")[0].trim() === "MyNFTList") {
+          const NFTList = JSON.parse(Cookies[i].split("=")[1]);
+          if (NFTList.includes(id)) {
             return true;
           }
         }
@@ -256,14 +256,14 @@ function Report(props: any) {
                   <Typography>tokenId: {values.tokenId}</Typography>
                 </Grid>
                 <Grid item={true} className={classes.grid} xs={12} md={12} lg={12}>
-                  <Link href='https://uniglodiamonds.com/wp-content/uploads/2019/05/Diamond-Grading-Report.jpg' target="_blank" download={true}>Click to download report</Link>
+                  <Link href='https://uniglodiamonds.com/wp-content/uploads/2019/05/NFT-Grading-Report.jpg' target="_blank" download={true}>Click to download report</Link>
                 </Grid>
-                {myDia && values.tokenId === "" && // my dia 일때 tokenId가 없으면 NFT 발행 버튼
+                {myNFT && values.tokenId === "" && // my nft 일때 tokenId가 없으면 NFT 발행 버튼
                   <Grid item={true} className={classes.grid} xs={12} md={12} lg={12}>
                     <Button fullWidth={true} variant="contained" color="primary" onClick={mintNFT}>NFT 발행</Button>
                   </Grid>
                 }
-                {myDia && values.tokenId !== "" && // my dia 일때 tokenId가 있으면 Price 입력창 과 market 매물 올리기 버튼
+                {myNFT && values.tokenId !== "" && // my nft 일때 tokenId가 있으면 Price 입력창 과 market 매물 올리기 버튼
                   <>
                     <Grid item={true} className={classes.grid} xs={6} md={6} lg={6}>
                       <TextField

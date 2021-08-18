@@ -28,7 +28,7 @@ function LandingPage() {
           <br />
           <br />
           <br />
-          <Typography variant="h4" className={classes.mainCopy}>Diamond is forever</Typography>
+          <Typography variant="h4" className={classes.mainCopy}>NFT is forever</Typography>
         </div>
         <Parallax y={[0, -30]}>
           <Paper className={classes.paper}>

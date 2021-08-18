@@ -1,10 +1,10 @@
 /*
-DiaStableCoin : 0xF0502E151076A6a1a38e1689e7B13fC73d7942D8
+NFTStableCoin : 0xF0502E151076A6a1a38e1689e7B13fC73d7942D8
 Pool : 0x7002B18b24E556c9da329e247B1E77a6F55A3add
 Market : 0xbdFF61c24e8A0F8a8770e30E172E40a19a77bCf2
 
 ReportRegistry : 0x542e4382C18865618B73fBb294AA0B4783Bad10E
-DiaShieldNFT : 0xbbBA22b4fF18a8cdd7b74b5aA207D7195c3b970D
+NFTShieldNFT : 0xbbBA22b4fF18a8cdd7b74b5aA207D7195c3b970D
 
 */
 const NFTContractAddress = "0xAf67E90695eA096AA037Ee117A4Ea646f476BE9F";
@@ -511,7 +511,7 @@ const marketABI = [
         "type": "uint256"
       }
     ],
-    "name": "rentDiamond",
+    "name": "rentNFT",
     "outputs": [
       {
         "internalType": "bool",
@@ -532,7 +532,7 @@ const marketABI = [
         "type": "uint256"
       }
     ],
-    "name": "returnDiamond",
+    "name": "returnNFT",
     "outputs": [
       {
         "internalType": "bool",
@@ -553,7 +553,7 @@ const marketABI = [
         "type": "uint256"
       },
       {
-        "internalType": "enum Market.DiaStatus",
+        "internalType": "enum Market.NFTStatus",
         "name": "newStatus",
         "type": "uint8"
       }
@@ -668,7 +668,7 @@ const marketABI = [
         "type": "uint256"
       }
     ],
-    "name": "getDiamond",
+    "name": "getNFT",
     "outputs": [
       {
         "components": [
@@ -708,7 +708,7 @@ const marketABI = [
             "type": "bytes32"
           },
           {
-            "internalType": "enum Market.DiaStatus",
+            "internalType": "enum Market.NFTStatus",
             "name": "status",
             "type": "uint8"
           }
@@ -725,7 +725,7 @@ const marketABI = [
   {
     "constant": true,
     "inputs": [],
-    "name": "getDiamonds",
+    "name": "getNFTs",
     "outputs": [
       {
         "internalType": "uint256[]",
@@ -763,7 +763,7 @@ const marketABI = [
         "type": "bytes32[]"
       },
       {
-        "internalType": "enum Market.DiaStatus[]",
+        "internalType": "enum Market.NFTStatus[]",
         "name": "",
         "type": "uint8[]"
       }
@@ -983,7 +983,7 @@ const poolABI = [
         "type": "uint256"
       }
     ],
-    "name": "investForDiaTx",
+    "name": "investForNFTTx",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",

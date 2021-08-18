@@ -118,7 +118,7 @@ function NewReport() {
                 </Grid>
                 <Grid item={true} className={classes.grid} xs={12} md={12} lg={12}>
                   <Button variant="contained" component="label">
-                    <Typography>{"Upload Diamond Report"}</Typography>
+                    <Typography>{"Upload NFT Report"}</Typography>
                     <input id={"file-input"} style={{ display: 'none' }} type="file" name="reportFile" onChange={handleReportChange} />
                   </Button>
                 </Grid>

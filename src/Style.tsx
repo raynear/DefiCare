@@ -1,5 +1,5 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import DiaMain from "./dia_main.jpg";
+import NFTMain from "./dia_main.jpg";
 import Img4 from "./dia4.jpg";
 
 
@@ -127,7 +127,7 @@ const useStyles = makeStyles((theme: Theme) =>
       textShadow: "-1px -1px 0 #888, 1px -1px 0 #888,-1px 1px 0 #888, 1px 1px 0 #888"
     },
     mainImg: {
-      backgroundImage: `url(${DiaMain})`,
+      backgroundImage: `url(${NFTMain})`,
       backgroundPosition: "center",
       backgroundSize: "cover",
       backgroundRepeat: "no-repeat",
