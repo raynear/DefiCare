@@ -7,12 +7,11 @@ import Web3 from "web3";
 
 import Header from './Header';
 import LandingPage from './LandingPage';
-import NewReport from './NewReport';
-import MyReportList from './MyReportList';
-import Report from './Report';
 import NFTList from './NFTList';
 import NFT from './NFT';
-import Investor from './Investor';
+import FT from './FT';
+import OptionList from './OptionList';
+import Option from './Option';
 import Config from './Config';
 import Copyright from './Copyright';
 
@@ -50,10 +49,9 @@ function App() {
             <Route exact={true} path="/DefiCare/" component={LandingPage} />
             <Route exact={true} path="/DefiCare/NFT/:ID" component={NFT} />
             <Route exact={true} path="/DefiCare/NFTList" component={NFTList} />
-            <Route exact={true} path="/DefiCare/NewReport" component={NewReport} />
-            <Route exact={true} path="/DefiCare/Report/:GirdleCode" component={Report} />
-            <Route exact={true} path="/DefiCare/MyReportList" component={MyReportList} />
-            <Route exact={true} path="/DefiCare/Investor" component={Investor} />
+            <Route exact={true} path="/DefiCare/FT" component={FT} />
+            <Route exact={true} path="/DefiCare/Option/:ID" component={Option} />
+            <Route exact={true} path="/DefiCare/OptionList" component={OptionList} />
             <Route exact={true} path="/DefiCare/Config" component={Config} />
           </Switch>
         </Router>

@@ -8,7 +8,6 @@ import Web3 from "web3";
 
 import useStyles from "./Style";
 import { OptionContractAddress, OptionABI } from "./SmartContract";
-import nftData from './provider';
 // import { ContractAddress, ContractABI } from "./ContractInfo";
 
 import art1 from './1.jpg';
@@ -23,10 +22,9 @@ function Option(props: any) {
   const classes = useStyles();
   const id = parseInt(props.match.params.ID, 10);
   const web3 = new Web3((window as any).web3.currentProvider);
-  const nftContract = new web3.eth.Contract(OptionABI as any, OptionContractAddress);
+  const contract = new web3.eth.Contract(OptionABI as any, OptionContractAddress);
 
-  const [values, setValues] = useState({ author: '', name: '' });
-  const [inMyList, setInMyList] = useState(false);
+  const [values, setValues] = useState({ amount:0, buyer:"", exercised:false, expiry:0, id:0, initPrice:0, optionPrice:0, targetPrice:0, writer:"" });
 
   //   const config = {
   //     headers: {'Access-Control-Allow-Origin': '*'}
@@ -37,11 +35,30 @@ function Option(props: any) {
     //   console.log(val);
     // const item = JSON.parse(val);
     // setValues({ author: item.author, name: item.name });
-    setValues({ author: nftData[id].author, name: nftData[id].name });
-    // });
 
-    setInMyList(inMyStorageList(id));
-  }, [])
+    web3.eth.getAccounts().then((account: any) => {
+      const myAddress = account[0];
+      web3.eth.defaultAccount = myAddress;
+      console.log(myAddress);
+
+
+    contract.methods.ftOpts(id).call().then((option: any) => {
+      setValues({
+        id:option.id as number,
+        initPrice:option.initPrice as number,
+        optionPrice:option.optionPrice as number,
+        targetPrice:option.targetPrice as number,
+        expiry:option.expiry as number,
+        amount:option.amount as number,
+        buyer:option.buyer as string,
+        writer:option.writer as string,
+        exercised: option.exercised as boolean
+      });
+
+    });
+  });
+
+  }, []);
 
   window.addEventListener('load', async () => {
     if ((window as any).web3) {
@@ -75,20 +92,9 @@ function Option(props: any) {
   //   }
   // }
 
-  function inMyStorageList(aid: number) {
-    const tmpList = localStorage.getItem('MyList')
-    if (tmpList) {
-      const MyList = JSON.parse(tmpList);
-
-      if (MyList.includes(aid)) {
-        return true;
-      }
-    }
-    return false;
-  }
 
   // function rentOption() {
-  //   nftContract.methods.rentOption(id).send({ from: Retailer }).then((r: any) => {
+  //   contract.methods.rentOption(id).send({ from: Retailer }).then((r: any) => {
   //     console.log(r);
   //     // setMyStorageList(id);
   //     // setInMyList(true);
@@ -100,12 +106,14 @@ function Option(props: any) {
   // }
 
   function submit() {
-    const amount = 100;
+    const myAddress = "0x";
+    const value = 1000;
+
     console.log("submit");
-    nftContract.methods.transfer(OptionContractAddress, amount * Math.pow(10, 18)).send().then((r: any) => {
+    contract.methods.exercize(id).send({from:myAddress, value}).then((r: any) => {
       console.log(r);
       // removeMyStorageList(id);
-      props.history.push("/DefiCare/OptionList/");
+      props.history.push("/DefiCare/NFTList/");
     })
   }
 
@@ -138,16 +146,31 @@ function Option(props: any) {
                   <Typography>ID: {id}</Typography>
                 </Grid>
                 <Grid item={true} className={classes.grid} xs={12} md={6} lg={4}>
-                  <Typography>Author: {values.author}</Typography>
+                  <Typography>Author: {values.amount}</Typography>
+                </Grid>
+
+                <Grid item={true} className={classes.grid} xs={12} md={6} lg={4}>
+                  <Typography>Author: {values.expiry}</Typography>
+                </Grid>
+
+                <Grid item={true} className={classes.grid} xs={12} md={6} lg={4}>
+                  <Typography>Author: {values.initPrice}</Typography>
                 </Grid>
                 <Grid item={true} className={classes.grid} xs={12} md={6} lg={4}>
-                  <Typography>Name: {values.name}</Typography>
+                  <Typography>Name: {values.optionPrice}</Typography>
                 </Grid>
-                {!inMyList &&
+                <Grid item={true} className={classes.grid} xs={12} md={6} lg={4}>
+                  <Typography>Name: {values.targetPrice}</Typography>
+                </Grid>
+                <Grid item={true} className={classes.grid} xs={12} md={6} lg={4}>
+                  <Typography>Name: {values.buyer}</Typography>
+                </Grid>
+                <Grid item={true} className={classes.grid} xs={12} md={6} lg={4}>
+                  <Typography>Name: {values.writer}</Typography>
+                </Grid>
                   <Grid item={true} className={classes.grid} xs={12} md={12} lg={12}>
-                    <Button fullWidth={true} variant="contained" color="primary" onClick={submit}>Option={'>'}FT</Button>
+                    <Button fullWidth={true} variant="contained" color="primary" onClick={submit}>Option exercize</Button>
                   </Grid>
-                }
               </Grid>
             </Paper>
           </Grid>

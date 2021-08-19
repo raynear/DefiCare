@@ -7,40 +7,39 @@ import { Typography, Container, Grid, Paper, Button } from "@material-ui/core";
 import Web3 from "web3";
 
 import useStyles from "./Style";
-import { FTContractAddress, FTABI } from "./SmartContract";
-import nftData from './provider';
+import { FTContractAddress, FTABI, OptionContractAddress, OptionABI } from "./SmartContract";
+// import nftData from './provider';
 // import { ContractAddress, ContractABI } from "./ContractInfo";
 
-import art1 from './1.jpg';
+// import art1 from './1.jpg';
 import art2 from './2.jpg';
-import art3 from './3.jpg';
-import art4 from './4.jpg';
+// import art3 from './3.jpg';
+// import art4 from './4.jpg';
 
 
 // interface FourC { clarity: '', cut: '', carat: '', color: '' }
 
 function FT(props: any) {
   const classes = useStyles();
-  const id = parseInt(props.match.params.ID, 10);
   const web3 = new Web3((window as any).web3.currentProvider);
   const nftContract = new web3.eth.Contract(FTABI as any, FTContractAddress);
+  const optionContract = new web3.eth.Contract(OptionABI as any, OptionContractAddress);
 
-  const [values, setValues] = useState({ author: '', name: '' });
-  const [inMyList, setInMyList] = useState(false);
+  const [values, setValues] = useState(0);
 
   //   const config = {
   //     headers: {'Access-Control-Allow-Origin': '*'}
   // };
 
   useEffect(() => {
-    // axios.get("http://49.50.164.195:8888/v1/nft?id="+id.toString(), config).then((val) => {
-    //   console.log(val);
-    // const item = JSON.parse(val);
-    // setValues({ author: item.author, name: item.name });
-    setValues({ author: nftData[id].author, name: nftData[id].name });
-    // });
+    web3.eth.getAccounts().then((account: any) => {
+      const myAddress = account[0];
+      web3.eth.defaultAccount = myAddress;
 
-    setInMyList(inMyStorageList(id));
+      nftContract.methods.balanceOf(myAddress).call().then((balance: any) => {
+        setValues(balance);
+      });
+    });
   }, [])
 
   window.addEventListener('load', async () => {
@@ -75,18 +74,6 @@ function FT(props: any) {
   //   }
   // }
 
-  function inMyStorageList(aid: number) {
-    const tmpList = localStorage.getItem('MyList')
-    if (tmpList) {
-      const MyList = JSON.parse(tmpList);
-
-      if (MyList.includes(aid)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   // function rentFT() {
   //   nftContract.methods.rentFT(id).send({ from: Retailer }).then((r: any) => {
   //     console.log(r);
@@ -104,11 +91,14 @@ function FT(props: any) {
 
     const myAddress = (await web3.eth.getAccounts())[0];
     const amount = await nftContract.methods.balanceOf(myAddress).call();
-    const r = await nftContract.methods.transfer(FTContractAddress, amount).send();
+    await optionContract.methods.requestOption(amount).send({from:myAddress});
+    const id = 0;
+    const obj = await optionContract.methods.ftOpts(id).call();
 
-    console.log(r);
+    await optionContract.methods.buyOption(id).send({from:myAddress, value: obj.price});
+
     // removeMyStorageList(id);
-    props.history.push("/DefiCare/FTList/");
+    props.history.push("/DefiCare/OptionList/");
   }
 
   return (
@@ -122,34 +112,15 @@ function FT(props: any) {
             <Paper style={{ textAlign: "right" }}>
               <Grid container={true} className={classes.container}>
                 <Grid item={true} className={classes.grid} xs={12} md={12} lg={12}>
-                  {id === 0 &&
-                    <img src={art1} />
-                  }
-                  {id === 1 &&
                     <img src={art2} />
-                  }
-                  {id === 2 &&
-                    <img src={art3} />
-                  }
-                  {id === 3 &&
-                    <img src={art4} />
-                  }
                 </Grid>
 
                 <Grid item={true} className={classes.grid} xs={12} md={6} lg={4}>
-                  <Typography>ID: {id}</Typography>
+                  <Typography>Balance: {values}</Typography>
                 </Grid>
-                <Grid item={true} className={classes.grid} xs={12} md={6} lg={4}>
-                  <Typography>Author: {values.author}</Typography>
-                </Grid>
-                <Grid item={true} className={classes.grid} xs={12} md={6} lg={4}>
-                  <Typography>Name: {values.name}</Typography>
-                </Grid>
-                {!inMyList &&
                   <Grid item={true} className={classes.grid} xs={12} md={12} lg={12}>
-                    <Button fullWidth={true} variant="contained" color="primary" onClick={submit}>FT={'>'}FT</Button>
+                    <Button fullWidth={true} variant="contained" color="primary" onClick={submit}>FT={'>'}Option</Button>
                   </Grid>
-                }
               </Grid>
             </Paper>
           </Grid>

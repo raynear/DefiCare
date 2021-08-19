@@ -99,14 +99,15 @@ function NFT(props: any) {
   //   console.log("returnNFT");
   // }
 
-  function submit() {
-    const amount = 100;
+  async function submit() {
     console.log("submit");
-    nftContract.methods.transfer(NFTContractAddress, amount * Math.pow(10, 18)).send().then((r: any) => {
-      console.log(r);
+    const myAddress = (await web3.eth.getAccounts())[0];
+    web3.eth.defaultAccount = myAddress;
+    console.log(myAddress);
+    const res = await nftContract.methods.transferFrom(myAddress, NFTContractAddress, id).send({from:myAddress});
+      console.log(res);
       // removeMyStorageList(id);
-      props.history.push("/DefiCare/NFTList/");
-    })
+      props.history.push("/DefiCare/FT");
   }
 
   return (

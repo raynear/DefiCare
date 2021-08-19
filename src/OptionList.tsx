@@ -10,7 +10,6 @@ import useStyles from "./Style";
 import Web3 from "web3";
 
 import { OptionContractAddress, OptionABI } from "./SmartContract";
-import nftData from './provider';
 
 interface ITablePaginationActionsProps {
   count: number;
@@ -71,16 +70,15 @@ function TablePaginationActions(props: ITablePaginationActionsProps) {
 }
 
 interface IOption {
-  ID: number;
-  Author: string;
-  Name: string;
-}
-
-enum OptionStatus {
-  OffSale = 0,
-  OnSale = 1,
-  Rented = 2,
-  Sold = 3
+  amount:number, 
+  buyer: string,
+  exercised: boolean,
+  expiry: number,
+  id:number ,
+  initPrice:number, 
+  optionPrice: number,
+  targetPrice: number,
+  writer: string
 }
 
 // function OptionStatusStr(status: number) {
@@ -101,7 +99,6 @@ function OptionList(props: any) {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [filter, setFilter] = useState({ type: "Option", OffSale: false, OnSale: false, Rented: false, Sold: false })
   const [displayRows, setDisplayRows] = useState<IOption[]>([]);
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, displayRows.length - page * rowsPerPage);
@@ -118,11 +115,12 @@ function OptionList(props: any) {
       web3.eth.defaultAccount = myAddress;
       console.log(myAddress);
 
-      contract.methods.balanceOf(myAddress).call().then((nftCount: any) => {
-        console.log(nftCount);
+      contract.methods.getOptsLength().call().then((optsLength: any) => {
+        console.log(optsLength);
 
-        for (let i = 0; i < nftCount; i++) {
-          contract.methods.tokenOfOwnerByIndex(myAddress, i).call().then((token: any) => {
+        for (let i = 0; i < optsLength; i++) {
+          contract.methods.ftOpts(i).call().then((option: any) => {
+
             const tmpDisplayRows = displayRows;
             // contract.methods.cards(token).call().then((card: any) => {
             //   console.log(card);
@@ -133,9 +131,19 @@ function OptionList(props: any) {
             //   setFilter({ ...filter, OffSale: true, OnSale: true, Rented: true, Sold: true })
             // });
 
-            tmpDisplayRows.push({ ID: token, Author: nftData[token].author, Name: nftData[token].name });
+            tmpDisplayRows.push({
+              id:option.id as number,
+              initPrice:option.initPrice as number,
+              optionPrice:option.optionPrice as number,
+              targetPrice:option.targetPrice as number,
+              expiry:option.expiry as number,
+              amount:option.amount as number,
+              buyer:option.buyer as string,
+              writer:option.writer as string,
+              exercised: option.exercised as boolean
+            });
+            console.log(tmpDisplayRows);
             setDisplayRows(tmpDisplayRows)
-            setFilter({ ...filter, OffSale: true, OnSale: true, Rented: true, Sold: true })
 
             // });
           });
@@ -202,34 +210,6 @@ function OptionList(props: any) {
   //   setFilter({ ...filter, [status]: !filter[status] })
   // }
 
-  function inMyStorageList(id: number) {
-    const tmpList = localStorage.getItem('MyList')
-    if (tmpList) {
-      const MyList = JSON.parse(tmpList);
-
-      if (MyList.includes(id)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-
-  function filtering(obj: any) {
-    if (filter.type === "My" && !inMyStorageList(parseInt(obj.ID, 10))) {
-      return false;
-    }
-    if (filter.OffSale && parseInt(obj.Status, 10) === OptionStatus.OffSale) {
-      return true;
-    } else if (filter.OnSale && parseInt(obj.Status, 10) === OptionStatus.OnSale) {
-      return true;
-    } else if (filter.Rented && parseInt(obj.Status, 10) === OptionStatus.Rented) {
-      return true;
-    } else if (filter.Sold && parseInt(obj.Status, 10) === OptionStatus.Sold) {
-      return true;
-    }
-    return false;
-  }
 
   console.log(displayRows);
   return (
@@ -237,25 +217,34 @@ function OptionList(props: any) {
       <Grid container={true} className={classes.container}>
         <Grid item={true} className={classes.grid} xs={12} md={12} lg={12}>
           <div className={classes.listImg}>
-            <Typography variant="h4" color="textSecondary" className={classes.listText}>{filter.type} List</Typography>
+            <Typography variant="h4" color="textSecondary" className={classes.listText}>Option List</Typography>
           </div>
           <Paper style={{ textAlign: "right" }}>
             <Table className={classes.table} size="small">
               <TableHead>
                 <TableRow>
                   <TableCell className={classes.tablehead}>ID</TableCell>
-                  <TableCell className={classes.tablehead} align="center">Author</TableCell>
-                  <TableCell className={classes.tablehead} align="center">Name</TableCell>
+                  <TableCell className={classes.tablehead} align="center">amount</TableCell>
+                  <TableCell className={classes.tablehead} align="center">initPrice</TableCell>
+                  <TableCell className={classes.tablehead} align="center">optionPrice</TableCell>
+                  <TableCell className={classes.tablehead} align="center">targetPrice</TableCell>
+                  <TableCell className={classes.tablehead} align="center">expiry</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {(rowsPerPage > 0 ? displayRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : displayRows).map((row: any) => (
-                  <TableRow key={row.ID} hover={true} onClick={(e) => handleClick(e, row.ID)}>
-                    <TableCell align="center">{row.ID}</TableCell>
-                    <TableCell align="center">{row.Author}</TableCell>
-                    <TableCell align="center">{row.Name}</TableCell>
+                {(rowsPerPage > 0 ? displayRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : displayRows).map((row: any) => {
+                  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                  console.log(row);
+                  return (
+                  <TableRow key={row.id} hover={true} onClick={(e) => handleClick(e, row.id)}>
+                    <TableCell align="center">{row.id}</TableCell>
+                    <TableCell align="center">{row.amount}</TableCell>
+                    <TableCell align="center">{row.initPrice}</TableCell>
+                    <TableCell align="center">{row.optionPrice}</TableCell>
+                    <TableCell align="center">{row.targetPrice}</TableCell>
+                    <TableCell align="center">{row.expiry}</TableCell>
                   </TableRow>
-                ))}
+                );})}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 33 * emptyRows }}>
                     <TableCell colSpan={8} />
@@ -267,7 +256,7 @@ function OptionList(props: any) {
                   <TablePagination
                     rowsPerPageOptions={[10, 20, 30, { label: 'All', value: -1 }]}
                     colSpan={8}
-                    count={displayRows.filter((obj: any) => filtering(obj)).length}
+                    count={displayRows.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     SelectProps={{
