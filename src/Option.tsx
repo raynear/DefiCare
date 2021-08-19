@@ -7,7 +7,7 @@ import { Typography, Container, Grid, Paper, Button } from "@material-ui/core";
 import Web3 from "web3";
 
 import useStyles from "./Style";
-import { NFTContractAddress, NFTABI } from "./SmartContract";
+import { OptionContractAddress, OptionABI } from "./SmartContract";
 import nftData from './provider';
 // import { ContractAddress, ContractABI } from "./ContractInfo";
 
@@ -19,11 +19,11 @@ import art4 from './4.jpg';
 
 // interface FourC { clarity: '', cut: '', carat: '', color: '' }
 
-function NFT(props: any) {
+function Option(props: any) {
   const classes = useStyles();
   const id = parseInt(props.match.params.ID, 10);
   const web3 = new Web3((window as any).web3.currentProvider);
-  const nftContract = new web3.eth.Contract(NFTABI as any, NFTContractAddress);
+  const nftContract = new web3.eth.Contract(OptionABI as any, OptionContractAddress);
 
   const [values, setValues] = useState({ author: '', name: '' });
   const [inMyList, setInMyList] = useState(false);
@@ -87,25 +87,25 @@ function NFT(props: any) {
     return false;
   }
 
-  // function rentNFT() {
-  //   nftContract.methods.rentNFT(id).send({ from: Retailer }).then((r: any) => {
+  // function rentOption() {
+  //   nftContract.methods.rentOption(id).send({ from: Retailer }).then((r: any) => {
   //     console.log(r);
   //     // setMyStorageList(id);
   //     // setInMyList(true);
   //   });
   // }
 
-  // function returnNFT() {
-  //   console.log("returnNFT");
+  // function returnOption() {
+  //   console.log("returnOption");
   // }
 
   function submit() {
     const amount = 100;
     console.log("submit");
-    nftContract.methods.transfer(NFTContractAddress, amount * Math.pow(10, 18)).send().then((r: any) => {
+    nftContract.methods.transfer(OptionContractAddress, amount * Math.pow(10, 18)).send().then((r: any) => {
       console.log(r);
       // removeMyStorageList(id);
-      props.history.push("/DefiCare/NFTList/");
+      props.history.push("/DefiCare/OptionList/");
     })
   }
 
@@ -115,7 +115,7 @@ function NFT(props: any) {
         <Grid container={true} className={classes.container}>
           <Grid item={true} className={classes.grid} xs={12} md={12} lg={12}>
             <div className={classes.listImg}>
-              <Typography variant="h4" color="textSecondary" className={classes.listText}>NFT</Typography>
+              <Typography variant="h4" color="textSecondary" className={classes.listText}>Option</Typography>
             </div>
             <Paper style={{ textAlign: "right" }}>
               <Grid container={true} className={classes.container}>
@@ -145,7 +145,7 @@ function NFT(props: any) {
                 </Grid>
                 {!inMyList &&
                   <Grid item={true} className={classes.grid} xs={12} md={12} lg={12}>
-                    <Button fullWidth={true} variant="contained" color="primary" onClick={submit}>NFT={'>'}FT</Button>
+                    <Button fullWidth={true} variant="contained" color="primary" onClick={submit}>Option={'>'}FT</Button>
                   </Grid>
                 }
               </Grid>
@@ -157,4 +157,4 @@ function NFT(props: any) {
   );
 }
 
-export default NFT;
+export default Option;

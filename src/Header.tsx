@@ -21,7 +21,7 @@ function Header() {
       <Toolbar className={classes.toolbar}>
         <Link className={classes.toolbarLink} color="textSecondary" noWrap={true} variant="h6" href="/DefiCare/Config">{" "}</Link>
         <Link className={classes.toolbarLink} color="textSecondary" noWrap={true} variant="subtitle1" href="/DefiCare/NFTList">
-          <b>Market</b>
+          <b>NFTList</b>
         </Link>
         <Link className={classes.toolbarLink} color="textSecondary" noWrap={true} variant="subtitle1" href="/DefiCare/MyReportList">
           <b>My Report</b>

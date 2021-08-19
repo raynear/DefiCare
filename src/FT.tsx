@@ -7,7 +7,7 @@ import { Typography, Container, Grid, Paper, Button } from "@material-ui/core";
 import Web3 from "web3";
 
 import useStyles from "./Style";
-import { NFTContractAddress, NFTABI } from "./SmartContract";
+import { FTContractAddress, FTABI } from "./SmartContract";
 import nftData from './provider';
 // import { ContractAddress, ContractABI } from "./ContractInfo";
 
@@ -19,11 +19,11 @@ import art4 from './4.jpg';
 
 // interface FourC { clarity: '', cut: '', carat: '', color: '' }
 
-function NFT(props: any) {
+function FT(props: any) {
   const classes = useStyles();
   const id = parseInt(props.match.params.ID, 10);
   const web3 = new Web3((window as any).web3.currentProvider);
-  const nftContract = new web3.eth.Contract(NFTABI as any, NFTContractAddress);
+  const nftContract = new web3.eth.Contract(FTABI as any, FTContractAddress);
 
   const [values, setValues] = useState({ author: '', name: '' });
   const [inMyList, setInMyList] = useState(false);
@@ -87,26 +87,28 @@ function NFT(props: any) {
     return false;
   }
 
-  // function rentNFT() {
-  //   nftContract.methods.rentNFT(id).send({ from: Retailer }).then((r: any) => {
+  // function rentFT() {
+  //   nftContract.methods.rentFT(id).send({ from: Retailer }).then((r: any) => {
   //     console.log(r);
   //     // setMyStorageList(id);
   //     // setInMyList(true);
   //   });
   // }
 
-  // function returnNFT() {
-  //   console.log("returnNFT");
+  // function returnFT() {
+  //   console.log("returnFT");
   // }
 
-  function submit() {
-    const amount = 100;
+  async function submit() {
     console.log("submit");
-    nftContract.methods.transfer(NFTContractAddress, amount * Math.pow(10, 18)).send().then((r: any) => {
-      console.log(r);
-      // removeMyStorageList(id);
-      props.history.push("/DefiCare/NFTList/");
-    })
+
+    const myAddress = (await web3.eth.getAccounts())[0];
+    const amount = await nftContract.methods.balanceOf(myAddress).call();
+    const r = await nftContract.methods.transfer(FTContractAddress, amount).send();
+
+    console.log(r);
+    // removeMyStorageList(id);
+    props.history.push("/DefiCare/FTList/");
   }
 
   return (
@@ -115,7 +117,7 @@ function NFT(props: any) {
         <Grid container={true} className={classes.container}>
           <Grid item={true} className={classes.grid} xs={12} md={12} lg={12}>
             <div className={classes.listImg}>
-              <Typography variant="h4" color="textSecondary" className={classes.listText}>NFT</Typography>
+              <Typography variant="h4" color="textSecondary" className={classes.listText}>FT</Typography>
             </div>
             <Paper style={{ textAlign: "right" }}>
               <Grid container={true} className={classes.container}>
@@ -145,7 +147,7 @@ function NFT(props: any) {
                 </Grid>
                 {!inMyList &&
                   <Grid item={true} className={classes.grid} xs={12} md={12} lg={12}>
-                    <Button fullWidth={true} variant="contained" color="primary" onClick={submit}>NFT={'>'}FT</Button>
+                    <Button fullWidth={true} variant="contained" color="primary" onClick={submit}>FT={'>'}FT</Button>
                   </Grid>
                 }
               </Grid>
@@ -157,4 +159,4 @@ function NFT(props: any) {
   );
 }
 
-export default NFT;
+export default FT;

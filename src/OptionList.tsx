@@ -9,7 +9,7 @@ import useStyles from "./Style";
 
 import Web3 from "web3";
 
-import { NFTContractAddress, NFTABI } from "./SmartContract";
+import { OptionContractAddress, OptionABI } from "./SmartContract";
 import nftData from './provider';
 
 interface ITablePaginationActionsProps {
@@ -70,20 +70,20 @@ function TablePaginationActions(props: ITablePaginationActionsProps) {
   );
 }
 
-interface INFT {
+interface IOption {
   ID: number;
   Author: string;
   Name: string;
 }
 
-enum NFTStatus {
+enum OptionStatus {
   OffSale = 0,
   OnSale = 1,
   Rented = 2,
   Sold = 3
 }
 
-// function NFTStatusStr(status: number) {
+// function OptionStatusStr(status: number) {
 //   if (status === 0) {
 //     return "OffSale";
 //   } else if (status === 1) {
@@ -96,13 +96,13 @@ enum NFTStatus {
 //   return "NoStatusExist";
 // }
 
-function NFTList(props: any) {
+function OptionList(props: any) {
   const classes = useStyles();
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [filter, setFilter] = useState({ type: "NFT", OffSale: false, OnSale: false, Rented: false, Sold: false })
-  const [displayRows, setDisplayRows] = useState<INFT[]>([]);
+  const [filter, setFilter] = useState({ type: "Option", OffSale: false, OnSale: false, Rented: false, Sold: false })
+  const [displayRows, setDisplayRows] = useState<IOption[]>([]);
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, displayRows.length - page * rowsPerPage);
 
@@ -111,7 +111,7 @@ function NFTList(props: any) {
   useEffect(() => {
     // this.web3 = new Web3((window as any).web3.currentProvider);
     const web3 = new Web3((window as any).web3.currentProvider);
-    const contract = new web3.eth.Contract(NFTABI as any, NFTContractAddress);
+    const contract = new web3.eth.Contract(OptionABI as any, OptionContractAddress);
 
     web3.eth.getAccounts().then((account: any) => {
       const myAddress = account[0];
@@ -150,7 +150,7 @@ function NFTList(props: any) {
   // }
 
 
-  // async function getAllNFT(account: string, contract: any) {
+  // async function getAllOption(account: string, contract: any) {
   //   // let account = await web3.eth.getAccounts();//.then((account: any) => {
   //   // const myAddress = account[0];
   //   // web3.eth.defaultAccount = myAddress;
@@ -183,11 +183,11 @@ function NFTList(props: any) {
   };
 
   const handleClick = (e: React.MouseEvent<unknown>, name: string) => {
-    props.history.push("/DefiCare/NFT/" + name.toString());
+    props.history.push("/DefiCare/Option/" + name.toString());
   }
 
   // function filterList(listType: string) {
-  //   if (listType === "NFT") {
+  //   if (listType === "Option") {
   //     setFilter({ ...filter, type: listType })
   //   }
   //   else if (listType === "FT") {
@@ -219,13 +219,13 @@ function NFTList(props: any) {
     if (filter.type === "My" && !inMyStorageList(parseInt(obj.ID, 10))) {
       return false;
     }
-    if (filter.OffSale && parseInt(obj.Status, 10) === NFTStatus.OffSale) {
+    if (filter.OffSale && parseInt(obj.Status, 10) === OptionStatus.OffSale) {
       return true;
-    } else if (filter.OnSale && parseInt(obj.Status, 10) === NFTStatus.OnSale) {
+    } else if (filter.OnSale && parseInt(obj.Status, 10) === OptionStatus.OnSale) {
       return true;
-    } else if (filter.Rented && parseInt(obj.Status, 10) === NFTStatus.Rented) {
+    } else if (filter.Rented && parseInt(obj.Status, 10) === OptionStatus.Rented) {
       return true;
-    } else if (filter.Sold && parseInt(obj.Status, 10) === NFTStatus.Sold) {
+    } else if (filter.Sold && parseInt(obj.Status, 10) === OptionStatus.Sold) {
       return true;
     }
     return false;
@@ -288,4 +288,4 @@ function NFTList(props: any) {
   );
 }
 
-export default NFTList;
+export default OptionList;
