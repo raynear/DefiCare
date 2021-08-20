@@ -100,6 +100,7 @@ function OptionList(props: any) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [displayRows, setDisplayRows] = useState<IOption[]>([]);
+  const [filter, setFilter] = useState({});
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, displayRows.length - page * rowsPerPage);
 
@@ -145,6 +146,7 @@ function OptionList(props: any) {
             console.log(tmpDisplayRows);
             setDisplayRows(tmpDisplayRows)
 
+            setFilter({ ...filter, OffSale: true, OnSale: true, Rented: true, Sold: true })
             // });
           });
         }
@@ -232,10 +234,7 @@ function OptionList(props: any) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {(rowsPerPage > 0 ? displayRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : displayRows).map((row: any) => {
-                  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                  console.log(row);
-                  return (
+                {displayRows.map((row: any) => (
                   <TableRow key={row.id} hover={true} onClick={(e) => handleClick(e, row.id)}>
                     <TableCell align="center">{row.id}</TableCell>
                     <TableCell align="center">{row.amount}</TableCell>
@@ -244,7 +243,7 @@ function OptionList(props: any) {
                     <TableCell align="center">{row.targetPrice}</TableCell>
                     <TableCell align="center">{row.expiry}</TableCell>
                   </TableRow>
-                );})}
+                ))}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 33 * emptyRows }}>
                     <TableCell colSpan={8} />

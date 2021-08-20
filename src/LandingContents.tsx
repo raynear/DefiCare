@@ -23,7 +23,7 @@ function LandingContents() {
             <b>블록체인의 진정한 가치는 신뢰 비용의 문제를 해결하는 것입니다.</b>
           </Typography>
           <Typography variant="body1" color="textPrimary">
-            NFT Chain은 블록체인의 진정한 가치를 최대로 활용할 수 있는 실제 비즈니스 문제의 솔루션을 제공하는데 자부심을 가지고 있습니다.
+            Defi Care는 블록체인의 진정한 가치를 최대로 활용할 수 있는 실제 비즈니스 문제의 솔루션을 제공하는데 자부심을 가지고 있습니다.
           </Typography>
         </Grid>
         <Grid item={true} className={classes.gridContents} xs={12} md={12} lg={12}>

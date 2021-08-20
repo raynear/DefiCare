@@ -28,7 +28,7 @@ function LandingPage() {
           <br />
           <br />
           <br />
-          <Typography variant="h4" className={classes.mainCopy}>NFT is forever</Typography>
+          <Typography variant="h4" className={classes.mainCopy}>Token을 위한 인슈어테크(Insurtech)</Typography>
         </div>
         <Parallax y={[0, -30]}>
           <Paper className={classes.paper}>

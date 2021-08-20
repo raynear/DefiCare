@@ -7,9 +7,9 @@ ReportRegistry : 0x542e4382C18865618B73fBb294AA0B4783Bad10E
 NFTShieldNFT : 0xbbBA22b4fF18a8cdd7b74b5aA207D7195c3b970D
 
 */
-const NFTContractAddress = "0xA0215bC53e04432574BaCC8E8b34763322a98dE8";
-const FTContractAddress = "0x95FE0Fe44c8c7E4e920d6e8a3a4Ad9ED764590Bd";
-const OptionContractAddress = "0xa75A8Cb6035Ee66365a1aCD181f26A2E0eE95E24";
+const NFTContractAddress = "0x0f300D406fCC356e7D60C97c3aE9F009758D0B6e";
+const FTContractAddress = "0x7662F1a8ac6a7709BeFF8E00dE1e712eE7fa6434";
+const OptionContractAddress = "0x7d7674Ae60344e93B35D0e22a7454e8d9Ec06dce";
 
 const NFTABI = [
 	{
