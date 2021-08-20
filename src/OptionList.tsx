@@ -217,7 +217,7 @@ function OptionList(props: any) {
       <Grid container={true} className={classes.container}>
         <Grid item={true} className={classes.grid} xs={12} md={12} lg={12}>
           <div className={classes.listImg}>
-            <Typography variant="h4" color="textSecondary" className={classes.listText}>Option List</Typography>
+            <Typography variant="h4" color="textSecondary" className={classes.listText}>Put Option List</Typography>
           </div>
           <Paper style={{ textAlign: "right" }}>
             <Table className={classes.table} size="small">

@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
-
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/1d2e15fbd7314f4f60b47d97d9b852aacd5404f7/contracts/token/ERC20/ERC20.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/1d2e15fbd7314f4f60b47d97d9b852aacd5404f7/contracts/utils/math/SafeMath.sol";
 import "./Feed.sol";
@@ -14,9 +13,10 @@ contract Option {
     IERC20 internal FT;
     //Precomputing hash of strings
     address payable contractAddr;
+    address owner;
+    uint256 lockAmount;
     uint256 fee = 1 * 10**14; // 0.0001 ether
     uint256 week = 60 * 60 * 24 * 7 * 1000;
-
     //Options stored in arrays of struct
     struct option {
         uint256 targetPrice; //Price in USD (18 decimal places) option allows buyer to purchase tokens at
@@ -32,24 +32,27 @@ contract Option {
     option[] public ftOpts;
 
     //Kovan feeds: https://docs.chain.link/docs/reference-contracts
-    constructor() public {
+    constructor(address feed, address erc20) {
         //FT/USD Kovan feed
-        ftFeed = IFeed(0xd9145CCE52D386f254917e481eB44e9943F39138);
+        ftFeed = IFeed(feed);
         //FT token address on Kovan
-        FT = IERC20(0xf8e81D47203A594245E36C48e151709F0C19fBe8);
+        FT = IERC20(erc20);
         contractAddr = payable(address(this));
+        owner = msg.sender;
+    }
+
+    function getOptsLength() public view returns (uint256) {
+        return ftOpts.length;
     }
 
     //Returns the latest FT price
     function getFTPrice() public view returns (uint256) {
         uint256 price = ftFeed.getPrice();
-
         return uint256(price);
     }
 
     function getFTAmplitude() public view returns (uint256) {
         uint256 _amplitude = ftFeed.getAmplitude();
-
         return uint256(_amplitude);
     }
 
@@ -57,7 +60,7 @@ contract Option {
         uint256 ftPrice = getFTPrice();
         uint256 amplitude = getFTAmplitude();
         writeOption(
-            ftPrice - amplitude - fee,
+            ftPrice.sub(amplitude).sub(fee),
             fee,
             block.timestamp + 60 * 60 * 24 * 7,
             tknAmt
@@ -73,7 +76,11 @@ contract Option {
         uint256 tknAmt
     ) public payable {
         uint256 setPrice = getFTPrice();
-
+        require(
+            address(this).balance > targetPrice,
+            "contract doesn't have enough ether"
+        );
+        lockAmount = lockAmount.add(targetPrice);
         ftOpts.push(
             option(
                 targetPrice,
@@ -87,6 +94,11 @@ contract Option {
                 payable(address(0))
             )
         );
+    }
+
+    function unlockAmount(uint256 ID) public {
+        require(ftOpts[ID].expiry < block.timestamp, "Option is not expired");
+        lockAmount = lockAmount.sub(ftOpts[ID].targetPrice);
     }
 
     //Purchase a call option, needs desired token, ID of option and payment
@@ -121,9 +133,7 @@ contract Option {
         require(ftOpts[ID].buyer == msg.sender, "You do not own this option");
         require(!ftOpts[ID].exercised, "Option has already been exercised");
         require(ftOpts[ID].expiry > block.timestamp, "Option is expired");
-
         //Buyer exercises option, exercise cost paid to writer
-        FT.approve(address(this), ftOpts[ID].amount);
         require(
             FT.transferFrom(msg.sender, address(this), ftOpts[ID].amount),
             "Incorrect FT amount sent to exercise"
@@ -135,4 +145,11 @@ contract Option {
         );
         ftOpts[ID].exercised = true;
     }
+
+    function withdraw() public payable {
+        require(msg.sender == owner, "only owner can withdraw");
+        payable(owner).transfer(owner.balance.sub(lockAmount));
+    }
+
+    receive() external payable {}
 }

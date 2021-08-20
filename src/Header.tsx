@@ -23,8 +23,8 @@ function Header() {
         <Link className={classes.toolbarLink} color="textSecondary" noWrap={true} variant="subtitle1" href="/DefiCare/NFTList">
           <b>NFTList</b>
         </Link>
-        <Link className={classes.toolbarLink} color="textSecondary" noWrap={true} variant="subtitle1" href="/DefiCare/FTList">
-          <b>FTList</b>
+        <Link className={classes.toolbarLink} color="textSecondary" noWrap={true} variant="subtitle1" href="/DefiCare/FT">
+          <b>FT</b>
         </Link>
         <Link className={classes.toolbarLink} color="textSecondary" noWrap={true} variant="subtitle1" href="/DefiCare/OptionList">
           <b>OptionList</b>

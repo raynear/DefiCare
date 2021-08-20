@@ -11,8 +11,8 @@ import { FTContractAddress, FTABI, OptionContractAddress, OptionABI } from "./Sm
 // import nftData from './provider';
 // import { ContractAddress, ContractABI } from "./ContractInfo";
 
-// import art1 from './1.jpg';
-import art2 from './2.jpg';
+import art1 from './1.jpg';
+// import art2 from './2.jpg';
 // import art3 from './3.jpg';
 // import art4 from './4.jpg';
 
@@ -112,14 +112,14 @@ function FT(props: any) {
             <Paper style={{ textAlign: "right" }}>
               <Grid container={true} className={classes.container}>
                 <Grid item={true} className={classes.grid} xs={12} md={12} lg={12}>
-                    <img src={art2} />
+                    <img src={art1} />
                 </Grid>
 
                 <Grid item={true} className={classes.grid} xs={12} md={6} lg={4}>
                   <Typography>Balance: {values}</Typography>
                 </Grid>
                   <Grid item={true} className={classes.grid} xs={12} md={12} lg={12}>
-                    <Button fullWidth={true} variant="contained" color="primary" onClick={submit}>FT={'>'}Option</Button>
+                    <Button fullWidth={true} variant="contained" color="primary" onClick={submit}>FT={'>'}Put Option</Button>
                   </Grid>
               </Grid>
             </Paper>

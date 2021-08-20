@@ -105,12 +105,11 @@ function Option(props: any) {
   //   console.log("returnOption");
   // }
 
-  function submit() {
-    const myAddress = "0x";
-    const value = 1000;
+  async function submit() {
+    const myAddress = (await web3.eth.getAccounts())[0];
 
     console.log("submit");
-    contract.methods.exercize(id).send({from:myAddress, value}).then((r: any) => {
+    contract.methods.exercise(id).send({from:myAddress, value:values.targetPrice}).then((r: any) => {
       console.log(r);
       // removeMyStorageList(id);
       props.history.push("/DefiCare/NFTList/");
@@ -123,7 +122,7 @@ function Option(props: any) {
         <Grid container={true} className={classes.container}>
           <Grid item={true} className={classes.grid} xs={12} md={12} lg={12}>
             <div className={classes.listImg}>
-              <Typography variant="h4" color="textSecondary" className={classes.listText}>Option</Typography>
+              <Typography variant="h4" color="textSecondary" className={classes.listText}>Put Option</Typography>
             </div>
             <Paper style={{ textAlign: "right" }}>
               <Grid container={true} className={classes.container}>
@@ -154,22 +153,22 @@ function Option(props: any) {
                 </Grid>
 
                 <Grid item={true} className={classes.grid} xs={12} md={6} lg={4}>
-                  <Typography>Author: {values.initPrice}</Typography>
+                  <Typography>initPrice: {values.initPrice}</Typography>
                 </Grid>
                 <Grid item={true} className={classes.grid} xs={12} md={6} lg={4}>
-                  <Typography>Name: {values.optionPrice}</Typography>
+                  <Typography>optionPrice: {values.optionPrice}</Typography>
                 </Grid>
                 <Grid item={true} className={classes.grid} xs={12} md={6} lg={4}>
-                  <Typography>Name: {values.targetPrice}</Typography>
+                  <Typography>targetPrice: {values.targetPrice}</Typography>
                 </Grid>
                 <Grid item={true} className={classes.grid} xs={12} md={6} lg={4}>
-                  <Typography>Name: {values.buyer}</Typography>
+                  <Typography>buyer: {values.buyer}</Typography>
                 </Grid>
                 <Grid item={true} className={classes.grid} xs={12} md={6} lg={4}>
-                  <Typography>Name: {values.writer}</Typography>
+                  <Typography>writer: {values.writer}</Typography>
                 </Grid>
                   <Grid item={true} className={classes.grid} xs={12} md={12} lg={12}>
-                    <Button fullWidth={true} variant="contained" color="primary" onClick={submit}>Option exercize</Button>
+                    <Button fullWidth={true} variant="contained" color="primary" onClick={submit}>Put Option exercise</Button>
                   </Grid>
               </Grid>
             </Paper>
